@@ -81,26 +81,26 @@ SELECT @iWeekStart = MAX(weekstarts) FROM SiriusSQL.dbo.prefs
 SET @vcNewLine = CHAR(13) + CHAR(10)	  
 --==============================================					 
 DECLARE @vcSQL NVARCHAR(MAX)
-SET @vcSQL = 'SELECT ' + CASE @pvcPeriod
+SET @vcSQL = 'SELECT' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'DATEPART(HOUR, t.date_time)'
                               WHEN 'DATE'  THEN 'CAST(CONVERT(CHAR(8), t.date_time, 112) AS INT)'
                               WHEN 'DAY'   THEN 'DATEPART(WEEKDAY, t.date_time) + CASE WHEN DATEPART(WEEKDAY, t.date_time) < @iWeekStart THEN 7 ELSE 0 END - @iWeekStart + 1'
                               WHEN 'MONTH' THEN 'CAST(CONVERT(CHAR(6), t.date_time, 112) AS INT)'
-                              WHEN 'WEEK'  THEN 'CAST(CONVERT(CHAR(8), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 112) AS INT)'
+                              WHEN 'WEEK'  THEN */'CAST(CONVERT(CHAR(8), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 112) AS INT)'
                          END + ' AS PeriodSort,' + @vcNewLine
-           + '       ' + CASE @pvcPeriod
+           + '       ' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'REPLACE(LTRIM(RIGHT(CONVERT(VARCHAR(20), DATEADD(MINUTE, -1 * DATEPART(MINUTE, t.date_time), t.date_time), 100), 7)), '':00'', '' '')'
                               WHEN 'DATE'  THEN 'LEFT(DATENAME(MONTH, t.date_time), 3) + '' '' + CAST(DATEPART(DAY, t.date_time) AS VARCHAR)'
                               WHEN 'DAY'   THEN 'LEFT(DATENAME(WEEKDAY, t.date_time), 3)'
                               WHEN 'MONTH' THEN 'RIGHT(CONVERT(CHAR(11), t.date_time, 106), 8)'
-                              WHEN 'WEEK'  THEN 'CONVERT(CHAR(6), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 107)'
+                              WHEN 'WEEK'  THEN */'CONVERT(CHAR(6), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 107)'
                          END + ' AS Period,' + @vcNewLine
-           + '       ' + CASE @pvcPeriod
+           + '       ' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'REPLACE(LTRIM(RIGHT(CONVERT(VARCHAR(20), DATEADD(MINUTE, -1 * DATEPART(MINUTE, t.date_time), t.date_time), 100), 7)), ''00'', ''00 '')'
                               WHEN 'DATE'  THEN 'CONVERT(CHAR(10), t.date_time, 120)'
                               WHEN 'DAY'   THEN 'DATENAME(WEEKDAY, t.date_time)'
                               WHEN 'MONTH' THEN 'DATENAME(MONTH, t.date_time) + '' '' + DATENAME(YEAR, t.date_time)'
-                              WHEN 'WEEK'  THEN 'CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 120) + '' to '' + CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 5, t.date_time), 5)), 120)'
+                              WHEN 'WEEK'  THEN */'CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 120) + '' to '' + CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 5, t.date_time), 5)), 120)'
                          END + ' AS PeriodDescription,' + @vcNewLine
            + '       COUNT(DISTINCT t.sale_no) AS Transactions,' + @vcNewLine
            + '       SUM(t.quantity) AS Quantity,' + @vcNewLine
@@ -115,26 +115,26 @@ SET @vcSQL = 'SELECT ' + CASE @pvcPeriod
            + '               AND dci.item = t.item' + @vcNewLine
            + ' WHERE t.date_time BETWEEN @pdtStart AND @dtEnd' + @vcNewLine
            + ' GROUP BY' + @vcNewLine
-           + '       ' + CASE @pvcPeriod
+           + '       ' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'DATEPART(HOUR, t.date_time)'
                               WHEN 'DATE'  THEN 'CAST(CONVERT(CHAR(8), t.date_time, 112) AS INT)'
                               WHEN 'DAY'   THEN 'DATEPART(WEEKDAY, t.date_time) + CASE WHEN DATEPART(WEEKDAY, t.date_time) < @iWeekStart THEN 7 ELSE 0 END - @iWeekStart + 1'
                               WHEN 'MONTH' THEN 'CAST(CONVERT(CHAR(6), t.date_time, 112) AS INT)'
-                              WHEN 'WEEK'  THEN 'CAST(CONVERT(CHAR(8), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 112) AS INT)'
+                              WHEN 'WEEK'  THEN */'CAST(CONVERT(CHAR(8), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 112) AS INT)'
                          END + ',' + @vcNewLine
-           + '       ' + CASE @pvcPeriod
+           + '       ' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'REPLACE(LTRIM(RIGHT(CONVERT(VARCHAR(20), DATEADD(MINUTE, -1 * DATEPART(MINUTE, t.date_time), t.date_time), 100), 7)), '':00'', '' '')'
                               WHEN 'DATE'  THEN 'LEFT(DATENAME(MONTH, t.date_time), 3) + '' '' + CAST(DATEPART(DAY, t.date_time) AS VARCHAR)'
                               WHEN 'DAY'   THEN 'LEFT(DATENAME(WEEKDAY, t.date_time), 3)'
                               WHEN 'MONTH' THEN 'RIGHT(CONVERT(CHAR(11), t.date_time, 106), 8)'
-                              WHEN 'WEEK'  THEN 'CONVERT(CHAR(6), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 107)'
+                              WHEN 'WEEK'  THEN */'CONVERT(CHAR(6), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 107)'
                          END + ',' + @vcNewLine
-           + '       ' + CASE @pvcPeriod
+           + '       ' + /*CASE @pvcPeriod
                               WHEN 'HOUR'  THEN 'REPLACE(LTRIM(RIGHT(CONVERT(VARCHAR(20), DATEADD(MINUTE, -1 * DATEPART(MINUTE, t.date_time), t.date_time), 100), 7)), ''00'', ''00 '')'
                               WHEN 'DATE'  THEN 'CONVERT(CHAR(10), t.date_time, 120)'
                               WHEN 'DAY'   THEN 'DATENAME(WEEKDAY, t.date_time)'
                               WHEN 'MONTH' THEN 'DATENAME(MONTH, t.date_time) + '' '' + DATENAME(YEAR, t.date_time)'
-                              WHEN 'WEEK'  THEN 'CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 120) + '' to '' + CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 5, t.date_time), 5)), 120)'
+                              WHEN 'WEEK'  THEN */'CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 6, t.date_time), 6)), 120) + '' to '' + CONVERT(CHAR(10), DATEADD(DAY, @iWeekStart - 1, DATEADD(WEEK, DATEDIFF(WEEK, 5, t.date_time), 5)), 120)'
                          END + @vcNewLine                        
            + ' ORDER BY PeriodSort'
 --==============================================
